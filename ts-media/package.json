@@ -1,0 +1,21 @@
+{
+  "name": "apimaster-media-example",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Text, image and video generation against an OpenAI-compatible gateway, in TypeScript.",
+  "scripts": {
+    "chat": "tsx src/chat.ts",
+    "image": "tsx src/image.ts",
+    "video": "tsx src/video.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "openai": "^6.47.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
