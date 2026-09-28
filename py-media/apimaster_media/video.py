@@ -15,7 +15,7 @@ from .client import BASE_URL, api, download, poll
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("prompt", nargs="+")
-    parser.add_argument("--model", default="sora-2")
+    parser.add_argument("--model", default="seedance-2.5")
     parser.add_argument("--duration", type=int, default=4, choices=[4, 8, 12, 16, 20])
     parser.add_argument("--resolution", default="720p", choices=["720p", "1024p", "1080p"])
     parser.add_argument(
@@ -32,10 +32,6 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     prompt = " ".join(args.prompt)
-
-    if args.model == "sora-2" and args.resolution != "720p":
-        print("  sora-2 serves 720p only — use sora-2-pro for 1024p/1080p. Falling back to 720p.")
-        args.resolution = "720p"
 
     body = {
         "model": args.model,
@@ -54,13 +50,14 @@ def main() -> None:
     task_id = (submit.get("data") or [{}])[0].get("task_id") or submit.get("id")
     if not task_id:
         raise SystemExit(f"no task id in response: {submit}")
-    print(f"  task {task_id} — typically 1-3 minutes")
+    print(f"  task {task_id} — video is slow, often 10-15 minutes")
 
     done = poll(
         lambda: api(f"/videos/{task_id}", timeout=30),
         lambda value: value.get("status") == "completed",
         lambda value: value.get("status") in ("failed", "error", "cancelled"),
         initial_delay=15.0,
+        timeout=1800.0,  # seedance-2.5 took ~15 minutes for 4 seconds
         label="video",
     )
 

@@ -33,7 +33,7 @@ async function main() {
     process.exit(1);
   }
 
-  const model = arg('model') ?? 'sora-2';
+  const model = arg('model') ?? 'seedance-2.5';
   const reference = arg('ref');
   const body: Record<string, unknown> = {
     model,
@@ -53,13 +53,13 @@ async function main() {
   const submit = await api<SubmitResponse>('/videos/generations', { method: 'POST', body });
   const taskId = submit.data?.[0]?.task_id ?? submit.id;
   if (!taskId) throw new Error(`no task id in response: ${JSON.stringify(submit)}`);
-  console.log(`  task ${taskId} — typically 1-3 minutes`);
+  console.log(`  task ${taskId} — video is slow, often 10-15 minutes`);
 
   const done = await poll<StatusResponse>(
     () => api<StatusResponse>(`/videos/${taskId}`, { timeoutMs: 30_000 }),
     (value) => value.status === 'completed',
     (value) => ['failed', 'error', 'cancelled'].includes(value.status),
-    { initialDelayMs: 15_000, label: 'video' }
+    { initialDelayMs: 15_000, timeoutMs: 1_800_000, label: 'video' } // seedance-2.5: ~15 min for 4 s
   );
 
   const contentUrl = done.url ?? `${BASE_URL}/videos/${taskId}/content`;
