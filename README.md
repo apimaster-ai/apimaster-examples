@@ -1,6 +1,6 @@
 # Examples
 
-Two small, runnable projects that call an OpenAI-compatible gateway for text, images and
+Small, runnable projects that call an OpenAI-compatible gateway for text, images and
 video. They are written to be copied into real code: real error handling, real timeouts,
 real polling — not three-line toy snippets.
 
@@ -8,6 +8,7 @@ real polling — not three-line toy snippets.
 | --- | --- | --- |
 | [`ts-media`](ts-media) | TypeScript, `openai` SDK, `tsx` | `npm i && npm run image -- "a corgi on the moon"` |
 | [`py-media`](py-media) | Python 3.9+, `openai` + `requests` | `pip install -r requirements.txt && python -m apimaster_media.image "a corgi on the moon"` |
+| [`open-webui`](open-webui) | Open WebUI function (Python) | Paste into **Admin Panel → Functions**, set the key in the valves |
 
 Both read `APIMASTER_API_KEY` and `APIMASTER_BASE_URL` from the environment, so the same
 code runs against any other gateway by changing one variable.
